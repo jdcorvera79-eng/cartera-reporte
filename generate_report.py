@@ -1,22 +1,71 @@
-import os, json, requests, anthropic, traceback, sys
+import os, json, requests, anthropic
 from xml.etree import ElementTree as ET
 from datetime import datetime
 from urllib.parse import quote
+import yfinance as yf
+import numpy as np
 
 STOCKS = [
-    {"ticker": "TSLA",   "name": "Tesla"},
-    {"ticker": "HIMS",   "name": "Hims & Hers"},
-    {"ticker": "DUOL",   "name": "Duolingo"},
-    {"ticker": "BMNR",   "name": "Bitmine Immersion Technologies"},
-    {"ticker": "LODE",   "name": "Comstock Inc"},
-    {"ticker": "HGRAF",  "name": "HydroGraph Clean Power"},
-    {"ticker": "HBFG",   "name": "Happy Belly Food Group"},
-    {"ticker": "ABX",    "name": "Abacus Global Management", "query": "ABX Abacus Global Management"},
-    {"ticker": "3350", "name": "Metaplanet",               "query": "Metaplanet Bitcoin treasury"},
-    {"ticker": "BILD",   "name": "BuildDirect Technologies", "query": "BuildDirect Technologies BILD"},
-    {"ticker": "LIB",    "name": "LibertyStream Infrastructure", "query": "LibertyStream Infrastructure LIB"},
-    {"ticker": "TTT",    "name": "Titonic",                      "query": "Titonic TTT stock"},
+    {"ticker": "TSLA",   "yf": "TSLA",   "name": "Tesla"},
+    {"ticker": "HIMS",   "yf": "HIMS",   "name": "Hims & Hers"},
+    {"ticker": "DUOL",   "yf": "DUOL",   "name": "Duolingo"},
+    {"ticker": "BMNR",   "yf": "BMNR",   "name": "Bitmine Immersion Technologies"},
+    {"ticker": "LODE",   "yf": "LODE",   "name": "Comstock Inc"},
+    {"ticker": "HGRAF",  "yf": "HGRAF",  "name": "HydroGraph Clean Power"},
+    {"ticker": "HBFG",   "yf": "HBFG",   "name": "Happy Belly Food Group"},
+    {"ticker": "ABX",    "yf": "ABX",    "name": "Abacus Global Management", "query": "ABX Abacus Global Management"},
+    {"ticker": "3350",   "yf": "3350.T", "name": "Metaplanet",               "query": "Metaplanet Bitcoin treasury"},
+    {"ticker": "BILD",   "yf": "BILD.V", "name": "BuildDirect Technologies", "query": "BuildDirect Technologies BILD"},
+    {"ticker": "LIB",    "yf": "LIB.V",  "name": "LibertyStream Infrastructure", "query": "LibertyStream Infrastructure LIB"},
+    {"ticker": "TTT",    "yf": "TTT",    "name": "Titonic",                   "query": "Titonic TTT stock"},
 ]
+
+def calculate_rsi(closes, period=14):
+    if len(closes) < period + 1:
+        return 50
+    delta = np.diff(closes)
+    gain  = np.where(delta > 0, delta, 0.0)
+    loss  = np.where(delta < 0, -delta, 0.0)
+    avg_gain = np.mean(gain[-period:])
+    avg_loss = np.mean(loss[-period:])
+    if avg_loss == 0:
+        return 100
+    rs = avg_gain / avg_loss
+    return round(100 - (100 / (1 + rs)), 1)
+
+def fetch_technicals(s):
+    try:
+        hist = yf.Ticker(s["yf"]).history(period="1y")
+        if hist.empty:
+            return None
+        closes = hist["Close"].values
+        vols   = hist["Volume"].values
+        price  = closes[-1]
+        ma50   = np.mean(closes[-50:])  if len(closes) >= 50  else np.mean(closes)
+        ma200  = np.mean(closes[-200:]) if len(closes) >= 200 else np.mean(closes)
+        rsi    = calculate_rsi(closes)
+        avg_vol = np.mean(vols[-20:]) if len(vols) >= 20 else np.mean(vols)
+        last_vol = vols[-1]
+        vol_ratio = last_vol / avg_vol if avg_vol > 0 else 1.0
+        vol_label = "Alto" if vol_ratio > 1.3 else ("Bajo" if vol_ratio < 0.7 else "Normal")
+        wk52_high = max(closes[-252:]) if len(closes) >= 252 else max(closes)
+        wk52_low  = min(closes[-252:]) if len(closes) >= 252 else min(closes)
+        currency  = "¥" if s["yf"].endswith(".T") else ("C$" if s["yf"].endswith(".V") else "$")
+        fmt = lambda v: f"{currency}{v:.2f}" if v < 100 else f"{currency}{v:.1f}"
+        chg = ((price - closes[-2]) / closes[-2] * 100) if len(closes) >= 2 else 0
+        chg_str = f"+{chg:.1f}%" if chg >= 0 else f"{chg:.1f}%"
+        return {
+            "precio":   fmt(price),
+            "cambio":   chg_str,
+            "ma50":     fmt(ma50),
+            "ma200":    fmt(ma200),
+            "rsi":      int(rsi),
+            "volumen":  vol_label,
+            "semana52": f"{fmt(wk52_low)} – {fmt(wk52_high)}",
+        }
+    except Exception as e:
+        print(f"  yfinance error for {s['yf']}: {e}")
+        return None
 
 HEADERS = {"User-Agent": "Mozilla/5.0 (compatible; CarteraBot/1.0)"}
 
@@ -56,8 +105,9 @@ def fetch_google(query):
         print(f"  Google RSS error for {query}: {e}")
         return []
 
-print("Fetching news...")
+print("Fetching news and technical data...")
 all_news = {}
+all_technicals = {}
 for s in STOCKS:
     ticker = s["ticker"]
     query  = s.get("query", f"{s['name']} {ticker}")
@@ -65,7 +115,10 @@ for s in STOCKS:
     if len(news) < 2:
         news += fetch_google(query)
     all_news[ticker] = {"name": s["name"], "news": news[:3]}
-    print(f"  {ticker}: {len(all_news[ticker]['news'])} items")
+    tech = fetch_technicals(s)
+    all_technicals[ticker] = tech
+    tech_str = f"precio={tech['precio']} rsi={tech['rsi']}" if tech else "no data"
+    print(f"  {ticker}: {len(all_news[ticker]['news'])} noticias, {tech_str}")
 
 now = datetime.utcnow()
 client = anthropic.Anthropic(api_key=os.environ["ANTHROPIC_API_KEY"])
@@ -73,21 +126,15 @@ client = anthropic.Anthropic(api_key=os.environ["ANTHROPIC_API_KEY"])
 BATCH_PROMPT = """Analiza estas acciones y responde ÚNICAMENTE con un array JSON válido (sin explicaciones, sin markdown).
 
 FECHA: {fecha}
-NOTICIAS: {noticias}
+DATOS: {datos}
 
 Devuelve un array JSON con esta estructura por acción:
 [
   {{
     "ticker": "TSLA",
     "nombre": "Tesla",
-    "precio": "$245.50",
-    "cambio": "+2.3%",
-    "ma50": "$230",
-    "ma200": "$265",
-    "rsi": 55,
-    "volumen": "Normal",
     "recomendacion": "MANTENER",
-    "razonamiento": "2 frases en español justificando la recomendación.",
+    "razonamiento": "2 frases en español justificando la recomendación basada en noticias y datos técnicos.",
     "noticias": [
       {{
         "titulo": "Título en español",
@@ -104,13 +151,19 @@ Devuelve un array JSON con esta estructura por acción:
 Reglas:
 - recomendacion: COMPRAR, MANTENER, VENDER o ESPECULATIVO
 - oficial=true si fuente es GlobeNewswire, PR Newswire, BusinessWire o IR empresa
-- rsi es entero 0-100, todo el texto en español
-- Empieza directamente con ["""
+- Todo el texto en español, empieza directamente con ["""
 
-def analyze_batch(batch_news, fecha):
+def analyze_batch(batch_tickers, fecha):
+    batch_data = {}
+    for t in batch_tickers:
+        batch_data[t] = {
+            "name": all_news[t]["name"],
+            "news": all_news[t]["news"],
+            "technicals": all_technicals.get(t),
+        }
     prompt = BATCH_PROMPT.format(
         fecha=fecha,
-        noticias=json.dumps(batch_news, ensure_ascii=False)
+        datos=json.dumps(batch_data, ensure_ascii=False)
     )
     msg = client.messages.create(
         model="claude-sonnet-4-6",
@@ -133,8 +186,7 @@ print("Calling Claude API in batches...")
 all_acciones = []
 for i, batch in enumerate(batches):
     print(f"  Batch {i+1}/{len(batches)}: {batch}")
-    batch_news = {t: all_news[t] for t in batch}
-    acciones = analyze_batch(batch_news, fecha_str)
+    acciones = analyze_batch(batch, fecha_str)
     all_acciones.extend(acciones)
     print(f"  Got {len(acciones)} stocks")
 
@@ -170,6 +222,8 @@ def rsi_bar(rsi):
 
 def stock_card(a):
     color = REC_COLOR.get(a["recomendacion"], "#58a6ff")
+    tech  = all_technicals.get(a["ticker"]) or {}
+
     news_html = ""
     for n in a.get("noticias", []):
         badge = '<span style="color:#58a6ff;font-size:10px;font-weight:600">📋 [OFICIAL]</span> ' if n.get("oficial") else ""
@@ -179,7 +233,14 @@ def stock_card(a):
           <div style="color:var(--muted);font-size:12px;margin-top:4px">{n['descripcion']}</div>
         </div>"""
 
-    cambio_color = "#3fb950" if "+" in a.get("cambio","") else "#f85149"
+    precio    = tech.get("precio", "N/A")
+    cambio    = tech.get("cambio", "—")
+    cambio_color = "#3fb950" if "+" in cambio else "#f85149"
+    ma50      = tech.get("ma50", "N/A")
+    ma200     = tech.get("ma200", "N/A")
+    volumen   = tech.get("volumen", "N/A")
+    semana52  = tech.get("semana52", "N/A")
+    rsi_val   = tech.get("rsi", 50)
 
     return f"""<div class="stock-card" style="border-left:4px solid {color}">
   <div class="stock-header">
@@ -188,8 +249,8 @@ def stock_card(a):
       <span class="stock-ticker">{a['ticker']}</span>
     </div>
     <div style="text-align:right">
-      <div style="font-size:18px;font-weight:700;color:var(--text)">{a['precio']}</div>
-      <div style="font-size:13px;color:{cambio_color}">{a['cambio']}</div>
+      <div style="font-size:18px;font-weight:700;color:var(--text)">{precio}</div>
+      <div style="font-size:13px;color:{cambio_color}">{cambio}</div>
     </div>
   </div>
   <div class="stock-body">
@@ -200,11 +261,13 @@ def stock_card(a):
     <div class="stock-section">
       <div class="section-title">📈 Análisis técnico</div>
       <table style="width:100%;font-size:13px;border-collapse:collapse">
-        <tr><td style="color:var(--muted);padding:3px 0">MA50</td><td style="color:var(--text);text-align:right">{a['ma50']}</td></tr>
-        <tr><td style="color:var(--muted);padding:3px 0">MA200</td><td style="color:var(--text);text-align:right">{a['ma200']}</td></tr>
-        <tr><td style="color:var(--muted);padding:3px 0">Volumen</td><td style="color:var(--text);text-align:right">{a['volumen']}</td></tr>
+        <tr><td style="color:var(--muted);padding:3px 0">Precio</td><td style="color:var(--text);text-align:right">{precio}</td></tr>
+        <tr><td style="color:var(--muted);padding:3px 0">MA50</td><td style="color:var(--text);text-align:right">{ma50}</td></tr>
+        <tr><td style="color:var(--muted);padding:3px 0">MA200</td><td style="color:var(--text);text-align:right">{ma200}</td></tr>
+        <tr><td style="color:var(--muted);padding:3px 0">Volumen</td><td style="color:var(--text);text-align:right">{volumen}</td></tr>
+        <tr><td style="color:var(--muted);padding:3px 0">52 sem.</td><td style="color:var(--text);text-align:right;font-size:11px">{semana52}</td></tr>
       </table>
-      {rsi_bar(a.get('rsi', 50))}
+      {rsi_bar(rsi_val)}
     </div>
     <div class="stock-section">
       <div class="section-title">🎯 Recomendación</div>
