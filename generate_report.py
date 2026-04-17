@@ -270,3 +270,4 @@ with open("reporte_cartera.html", "w", encoding="utf-8") as f:
     f.write(html)
 
 print(f"Report written ({len(html):,} chars) with {len(data['acciones'])} stocks")
+
