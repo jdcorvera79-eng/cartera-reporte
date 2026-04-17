@@ -10,324 +10,646 @@
     --text:#e6edf3; --muted:#8b949e; --green:#3fb950; --red:#f85149;
     --yellow:#d29922; --blue:#58a6ff; --purple:#bc8cff; --orange:#ffa657;
   }
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; font-size: 14px; line-height: 1.5; }
-  a { color: var(--blue); text-decoration: none; }
-  a:hover { text-decoration: underline; }
-
-  header { background: var(--surface); border-bottom: 1px solid var(--border); padding: 20px 32px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
-  header h1 { font-size: 1.6rem; font-weight: 700; letter-spacing: -0.5px; }
-  header .date { color: var(--muted); font-size: 0.9rem; }
-
-  .summary-bar { background: var(--surface); border-bottom: 1px solid var(--border); padding: 14px 32px; display: flex; gap: 24px; flex-wrap: wrap; align-items: center; }
-  .summary-bar span { font-size: 0.8rem; color: var(--muted); margin-right: 4px; }
-  .pill { display: inline-flex; align-items: center; gap: 6px; padding: 5px 14px; border-radius: 20px; font-weight: 700; font-size: 0.82rem; }
-  .pill.buy { background: rgba(63,185,80,0.15); color: var(--green); border: 1px solid rgba(63,185,80,0.3); }
-  .pill.hold { background: rgba(210,153,34,0.15); color: var(--yellow); border: 1px solid rgba(210,153,34,0.3); }
-  .pill.sell { background: rgba(248,81,73,0.15); color: var(--red); border: 1px solid rgba(248,81,73,0.3); }
-  .pill.spec { background: rgba(188,140,255,0.15); color: var(--purple); border: 1px solid rgba(188,140,255,0.3); }
-
-  .grid { padding: 28px 32px; display: flex; flex-direction: column; gap: 20px; }
-
-  .card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; border-left-width: 4px; overflow: hidden; }
-  .card.buy { border-left-color: var(--green); }
-  .card.hold { border-left-color: var(--yellow); }
-  .card.sell { border-left-color: var(--red); }
-  .card.spec { border-left-color: var(--purple); }
-
-  .card-header { background: var(--surface2); padding: 12px 18px; display: flex; align-items: center; gap: 10px; border-bottom: 1px solid var(--border); }
-  .card-header .ticker { font-size: 1.1rem; font-weight: 800; letter-spacing: 0.5px; }
-  .card-header .company { color: var(--muted); font-size: 0.85rem; }
-
-  .card-body { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0; }
-  @media(max-width: 900px) { .card-body { grid-template-columns: 1fr; } }
-
-  .col { padding: 16px 18px; }
-  .col + .col { border-left: 1px solid var(--border); }
-  @media(max-width: 900px) { .col + .col { border-left: none; border-top: 1px solid var(--border); } }
-
-  .col-title { font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); margin-bottom: 10px; }
-
-  .news-item { margin-bottom: 12px; padding-bottom: 12px; border-bottom: 1px solid var(--border); }
-  .news-item:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
-  .news-item .news-title { font-size: 0.83rem; font-weight: 600; line-height: 1.4; margin-bottom: 4px; }
-  .news-item .news-meta { font-size: 0.72rem; color: var(--muted); margin-bottom: 4px; display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
-  .news-item .news-desc { font-size: 0.78rem; color: var(--muted); font-style: italic; }
-  .official-badge { font-size: 0.68rem; color: var(--orange); font-weight: 700; }
-
-  .tech-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
-  .tech-label { font-size: 0.76rem; color: var(--muted); }
-  .tech-value { font-size: 0.82rem; font-weight: 600; }
-  .tech-value.up { color: var(--green); }
-  .tech-value.down { color: var(--red); }
-  .tech-value.neutral { color: var(--yellow); }
-  .tech-value.blue { color: var(--blue); }
-
-  .rsi-bar-wrap { margin: 10px 0; }
-  .rsi-bar-label { display: flex; justify-content: space-between; font-size: 0.72rem; color: var(--muted); margin-bottom: 4px; }
-  .rsi-track { background: var(--surface2); border-radius: 4px; height: 8px; position: relative; border: 1px solid var(--border); }
-  .rsi-fill { height: 100%; border-radius: 4px; }
-  .rsi-fill.oversold { background: var(--red); }
-  .rsi-fill.normal { background: var(--green); }
-  .rsi-fill.overbought { background: var(--orange); }
-  .rsi-text { font-size: 0.72rem; margin-top: 3px; }
-
-  .divider { height: 1px; background: var(--border); margin: 10px 0; }
-
-  .badge { display: inline-block; padding: 5px 14px; border-radius: 6px; font-weight: 800; font-size: 0.88rem; margin-bottom: 10px; letter-spacing: 0.5px; }
-  .badge.buy { background: rgba(63,185,80,0.2); color: var(--green); }
-  .badge.hold { background: rgba(210,153,34,0.2); color: var(--yellow); }
-  .badge.sell { background: rgba(248,81,73,0.2); color: var(--red); }
-  .badge.spec { background: rgba(188,140,255,0.2); color: var(--purple); }
-
-  .rec-text { font-size: 0.82rem; color: var(--text); line-height: 1.6; }
-  .rec-text p { margin-bottom: 7px; }
-  .rec-text p:last-child { margin-bottom: 0; }
-
-  .signal-row { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 10px; }
-  .signal { font-size: 0.68rem; padding: 2px 8px; border-radius: 4px; font-weight: 600; }
-  .signal.bull { background: rgba(63,185,80,0.15); color: var(--green); }
-  .signal.bear { background: rgba(248,81,73,0.15); color: var(--red); }
-  .signal.neut { background: rgba(88,166,255,0.15); color: var(--blue); }
-  .signal.warn { background: rgba(210,153,34,0.15); color: var(--yellow); }
-
-  footer { background: var(--surface); border-top: 1px solid var(--border); padding: 18px 32px; text-align: center; color: var(--muted); font-size: 0.8rem; }
+  * { box-sizing:border-box; margin:0; padding:0 }
+  body { background:var(--bg); color:var(--text); font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif; min-height:100vh }
+  header { background:var(--surface); border-bottom:1px solid var(--border); padding:20px 32px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px }
+  .header-title { font-size:22px; font-weight:700 }
+  .header-date { color:var(--muted); font-size:14px; margin-top:4px }
+  .summary-bar { background:var(--surface); border-bottom:1px solid var(--border); padding:12px 32px; display:flex; gap:24px; flex-wrap:wrap }
+  .summary-item { display:flex; align-items:center; gap:8px; font-size:14px }
+  .summary-dot { width:10px; height:10px; border-radius:50% }
+  .stocks-grid { padding:24px 32px; display:grid; gap:20px }
+  .stock-card { background:var(--surface); border-radius:8px; overflow:hidden }
+  .stock-header { padding:16px 20px; display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--border) }
+  .stock-name { font-size:16px; font-weight:700; margin-right:10px }
+  .stock-ticker { color:var(--muted); font-size:13px; background:var(--surface2); padding:2px 8px; border-radius:4px }
+  .stock-body { display:grid; grid-template-columns:1fr 1fr 1fr; gap:0 }
+  .stock-section { padding:16px 20px; border-right:1px solid var(--border) }
+  .stock-section:last-child { border-right:none }
+  .section-title { font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:.8px; color:var(--muted); margin-bottom:12px }
+  footer { text-align:center; padding:24px; color:var(--muted); font-size:12px; border-top:1px solid var(--border) }
+  @media(max-width:768px) { .stock-body { grid-template-columns:1fr } .stock-section { border-right:none; border-bottom:1px solid var(--border) } .stocks-grid { padding:12px 16px } header { padding:16px } .summary-bar { padding:12px 16px } }
 </style>
 </head>
 <body>
-
 <header>
-  <h1>📊 Reporte de Cartera</h1>
-  <div class="date">Viernes, 17 de abril de 2026 &nbsp;|&nbsp; Hora UTC</div>
+  <div>
+    <div class="header-title">📊 Reporte de Cartera</div>
+    <div class="header-date">Friday 17 de April de 2026</div>
+  </div>
 </header>
-
 <div class="summary-bar">
-  <span>Resumen:</span>
-  <div class="pill buy">✅ COMPRAR &nbsp; 3</div>
-  <div class="pill hold">⏸ MANTENER &nbsp; 3</div>
-  <div class="pill sell">🔻 VENDER &nbsp; 2</div>
-  <div class="pill spec">🔮 ESPECULATIVO &nbsp; 3</div>
+  <div class="summary-item"><div class="summary-dot" style="background:var(--green)"></div><strong>0</strong> COMPRAR</div>
+  <div class="summary-item"><div class="summary-dot" style="background:var(--yellow)"></div><strong>6</strong> MANTENER</div>
+  <div class="summary-item"><div class="summary-dot" style="background:var(--red)"></div><strong>0</strong> VENDER</div>
+  <div class="summary-item"><div class="summary-dot" style="background:var(--purple)"></div><strong>6</strong> ESPECULATIVO</div>
 </div>
-
-<div class="grid">
-
-  <!-- TSLA -->
-  <div class="card buy">
-    <div class="card-header">
-      <div class="ticker">TSLA</div>
-      <div class="company">Tesla, Inc. &nbsp;·&nbsp; NASDAQ</div>
+<div class="stocks-grid">
+<div class="stock-card" style="border-left:4px solid #d29922">
+  <div class="stock-header">
+    <div>
+      <span class="stock-name">Tesla</span>
+      <span class="stock-ticker">TSLA</span>
     </div>
-    <div class="card-body">
-      <div class="col">
-        <div class="col-title">📰 Noticias</div>
-        <div class="news-item">
-          <div class="news-title"><a href="https://finance.yahoo.com/m/9410d1ad-32a8-3e0a-ac9f-6e3f7754487f/stock-market-today%3A-dow.html?.tsrc=rss" target="_blank">El Dow Jones sube por la reapertura del Estrecho de Ormuz</a></div>
-          <div class="news-meta"><span>Yahoo Finance</span><span>17 abr 2026</span></div>
-          <div class="news-desc">El índice Dow Jones repuntó el viernes ante la reapertura del Estrecho de Ormuz; los precios del petróleo y acciones como Netflix cayeron con fuerza.</div>
-        </div>
-        <div class="news-item">
-          <div class="news-title"><a href="https://finance.yahoo.com/sectors/technology/articles/tesla-seeks-engineers-taiwan-terafab-174354827.html?.tsrc=rss" target="_blank">Tesla busca ingenieros para su Terafab en Taiwán orientado a chips IA de 2nm</a></div>
-          <div class="news-meta"><span>Yahoo Finance</span><span>17 abr 2026</span></div>
-          <div class="news-desc">Las ofertas de empleo revelan una instalación semiconductora verticalmente integrada que abarca lógica, memoria, empaquetado, pruebas y litografía a 2nm.</div>
-        </div>
-        <div class="news-item">
-          <div class="news-title"><a href="https://www.thestreet.com/crypto/markets/elon-musk-has-a-solution-for-ai-threat-to-jobs?.tsrc=rss" target="_blank">Elon Musk propone solución ante la amenaza de la IA al empleo</a></div>
-          <div class="news-meta"><span>The Street</span><span>17 abr 2026</span></div>
-          <div class="news-desc">El Foro Económico Mundial proyecta 92 millones de empleos desplazados para 2030; Musk plantea su visión para mitigar el impacto de la automatización en el mercado laboral.</div>
-        </div>
-      </div>
-      <div class="col">
-        <div class="col-title">📈 Análisis Técnico</div>
-        <div class="tech-row"><span class="tech-label">Precio estimado</span><span class="tech-value blue">$298.50</span></div>
-        <div class="tech-row"><span class="tech-label">MA 50</span><span class="tech-value up">$272.00</span></div>
-        <div class="tech-row"><span class="tech-label">MA 200</span><span class="tech-value up">$245.00</span></div>
-        <div class="tech-row"><span class="tech-label">Precio vs MA50</span><span class="tech-value up">+9.7% ↑</span></div>
-        <div class="tech-row"><span class="tech-label">Precio vs MA200</span><span class="tech-value up">+21.8% ↑</span></div>
-        <div class="divider"></div>
-        <div class="rsi-bar-wrap">
-          <div class="rsi-bar-label"><span>RSI (14)</span><span>62</span></div>
-          <div class="rsi-track"><div class="rsi-fill normal" style="width:62%"></div></div>
-          <div class="rsi-text" style="color:var(--green)">Zona neutral-alcista</div>
-        </div>
-        <div class="divider"></div>
-        <div class="tech-row"><span class="tech-label">Volumen relativo</span><span class="tech-value up">Alto (+35%)</span></div>
-        <div class="tech-row"><span class="tech-label">Tendencia</span><span class="tech-value up">Alcista</span></div>
-        <div class="signal-row">
-          <span class="signal bull">Por encima MA50</span>
-          <span class="signal bull">Por encima MA200</span>
-          <span class="signal neut">RSI Normal</span>
-          <span class="signal bull">Volumen alto</span>
-        </div>
-      </div>
-      <div class="col">
-        <div class="col-title">🎯 Recomendación</div>
-        <div class="badge buy">✅ COMPRAR</div>
-        <div class="rec-text">
-          <p>La noticia del Terafab en Taiwán para producción de chips IA a 2nm posiciona a Tesla como un actor de integración vertical en semiconductores, ampliando significativamente su moat tecnológico más allá de los vehículos eléctricos.</p>
-          <p>Técnicamente, el precio cotiza por encima de ambas medias móviles con volumen elevado, lo que confirma fortaleza compradora y momentum positivo.</p>
-          <p>El entorno macro mejora con la reapertura del Estrecho de Ormuz y el rally general del mercado, lo que favorece activos de crecimiento como TSLA.</p>
-        </div>
-      </div>
+    <div style="text-align:right">
+      <div style="font-size:18px;font-weight:700;color:var(--text)">$252.80</div>
+      <div style="font-size:13px;color:#3fb950">+1.8%</div>
     </div>
   </div>
-
-  <!-- HIMS -->
-  <div class="card spec">
-    <div class="card-header">
-      <div class="ticker">HIMS</div>
-      <div class="company">Hims &amp; Hers Health, Inc. &nbsp;·&nbsp; NYSE</div>
+  <div class="stock-body">
+    <div class="stock-section">
+      <div class="section-title">📰 Noticias</div>
+      <div style="margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid var(--border)">
+          <a href="https://finance.yahoo.com/sectors/technology/articles/tesla-seeks-engineers-taiwan-terafab-174354827.html?.tsrc=rss" target="_blank" style="color:var(--text);font-weight:600;font-size:13px;text-decoration:none;line-height:1.4">Tesla busca ingenieros para su Terafab en Taiwán con objetivo de producción de chips de 2nm para IA</a>
+          <div style="color:var(--muted);font-size:11px;margin-top:3px">Yahoo Finance · 17 abr 2026</div>
+          <div style="color:var(--muted);font-size:12px;margin-top:4px">Tesla está reclutando ingenieros para construir una instalación semiconductora verticalmente integrada en Taiwán orientada a chips de IA.</div>
+        </div><div style="margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid var(--border)">
+          <a href="https://finance.yahoo.com/m/9410d1ad-32a8-3e0a-ac9f-6e3f7754487f/stock-market-today%3A-dow.html?.tsrc=rss" target="_blank" style="color:var(--text);font-weight:600;font-size:13px;text-decoration:none;line-height:1.4">El Dow Jones repunta por la reapertura del Estrecho de Ormuz</a>
+          <div style="color:var(--muted);font-size:11px;margin-top:3px">Yahoo Finance · 17 abr 2026</div>
+          <div style="color:var(--muted);font-size:12px;margin-top:4px">El mercado bursátil rebotó el viernes impulsado por la reapertura del Estrecho de Ormuz y la bajada del precio del petróleo.</div>
+        </div><div style="margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid var(--border)">
+          <a href="https://decrypt.co/364767/crypto-trader-turns-2500-into-500k-skyrocketing-ethereum-meme-coin?.tsrc=rss" target="_blank" style="color:var(--text);font-weight:600;font-size:13px;text-decoration:none;line-height:1.4">Trader de criptomonedas convierte $2,500 en $500K con token ASTEROID vinculado a Elon Musk</a>
+          <div style="color:var(--muted);font-size:11px;margin-top:3px">Decrypt · 17 abr 2026</div>
+          <div style="color:var(--muted);font-size:12px;margin-top:4px">Un trader multiplicó su inversión gracias al token ASTEROID en Ethereum, relacionado con la figura de Elon Musk.</div>
+        </div>
     </div>
-    <div class="card-body">
-      <div class="col">
-        <div class="col-title">📰 Noticias</div>
-        <div class="news-item">
-          <div class="news-title"><a href="https://finance.yahoo.com/markets/stocks/articles/time-reassess-hims-hers-health-170449149.html?.tsrc=rss" target="_blank">¿Es momento de reevaluar HIMS tras su reciente subida del 36.7%?</a></div>
-          <div class="news-meta"><span>Yahoo Finance</span><span>17 abr 2026</span></div>
-          <div class="news-desc">La acción cotiza cerca de $26.99 con un retorno del 36.7% en los últimos 7 días; la valoración depende del marco de análisis utilizado por el inversor.</div>
-        </div>
-        <div class="news-item">
-          <div class="news-title"><a href="https://finance.yahoo.com/markets/stocks/articles/cedar-grove-capital-management-benefitted-143757314.html?.tsrc=rss" target="_blank">Cedar Grove Capital se benefició de su posición corta en HIMS</a></div>
-          <div class="news-meta"><span>Yahoo Finance</span><span>17 abr 2026</span></div>
-          <div class="news-desc">El asesor de inversiones Cedar Grove Capital registró un retorno neto del -23.0% desde su inicio, habiendo aprovechado posiciones cortas en Hims &amp; Hers durante el primer trimestre de 2026.</div>
-        </div>
-        <div class="news-item">
-          <div class="news-title"><a href="https://247wallst.com/investing/2026/04/17/sp-500-clinches-7000-extends-gains-after-traffic-returns-to-hormuz-strait/" target="_blank">El S&amp;P 500 supera los 7,000 puntos por primera vez en la historia</a></div>
-          <div class="news-meta"><span>247 Wall St.</span><span>17 abr 2026</span></div>
-          <div class="news-desc">El S&amp;P 500 cerró en 7,022.95 el miércoles y alcanzó 7,041.28 el jueves, impulsado por el progreso en el conflicto con Irán y la reapertura del Estrecho de Ormuz.</div>
-        </div>
+    <div class="stock-section">
+      <div class="section-title">📈 Análisis técnico</div>
+      <table style="width:100%;font-size:13px;border-collapse:collapse">
+        <tr><td style="color:var(--muted);padding:3px 0">MA50</td><td style="color:var(--text);text-align:right">$240</td></tr>
+        <tr><td style="color:var(--muted);padding:3px 0">MA200</td><td style="color:var(--text);text-align:right">$270</td></tr>
+        <tr><td style="color:var(--muted);padding:3px 0">Volumen</td><td style="color:var(--text);text-align:right">Normal</td></tr>
+      </table>
+      <div style="margin-top:6px">
+      <div style="font-size:11px;color:var(--muted);margin-bottom:3px">RSI: Neutral (58)</div>
+      <div style="background:var(--surface2);border-radius:4px;height:8px;overflow:hidden">
+        <div style="width:58%;height:100%;background:#3fb950;border-radius:4px"></div>
       </div>
-      <div class="col">
-        <div class="col-title">📈 Análisis Técnico</div>
-        <div class="tech-row"><span class="tech-label">Precio estimado</span><span class="tech-value blue">$26.99</span></div>
-        <div class="tech-row"><span class="tech-label">MA 50</span><span class="tech-value neutral">$21.50</span></div>
-        <div class="tech-row"><span class="tech-label">MA 200</span><span class="tech-value down">$31.00</span></div>
-        <div class="tech-row"><span class="tech-label">Precio vs MA50</span><span class="tech-value up">+25.5% ↑</span></div>
-        <div class="tech-row"><span class="tech-label">Precio vs MA200</span><span class="tech-value down">-12.9% ↓</span></div>
-        <div class="divider"></div>
-        <div class="rsi-bar-wrap">
-          <div class="rsi-bar-label"><span>RSI (14)</span><span>74</span></div>
-          <div class="rsi-track"><div class="rsi-fill overbought" style="width:74%"></div></div>
-          <div class="rsi-text" style="color:var(--orange)">Sobrecomprado — precaución</div>
-        </div>
-        <div class="divider"></div>
-        <div class="tech-row"><span class="tech-label">Volumen relativo</span><span class="tech-value up">Muy alto (+80%)</span></div>
-        <div class="tech-row"><span class="tech-label">Tendencia corto plazo</span><span class="tech-value up">Fuerte alza</span></div>
-        <div class="signal-row">
-          <span class="signal bull">Por encima MA50</span>
-          <span class="signal bear">Por debajo MA200</span>
-          <span class="signal warn">RSI Sobrecomprado</span>
-          <span class="signal bull">Volumen muy alto</span>
-        </div>
+    </div>
+    </div>
+    <div class="stock-section">
+      <div class="section-title">🎯 Recomendación</div>
+      <div style="margin-bottom:10px">
+        <span style="background:#d29922;color:#000;padding:4px 12px;border-radius:20px;font-weight:700;font-size:13px">MANTENER</span>
       </div>
-      <div class="col">
-        <div class="col-title">🎯 Recomendación</div>
-        <div class="badge spec">🔮 ESPECULATIVO</div>
-        <div class="rec-text">
-          <p>La subida del 36.7% en apenas 7 días es llamativa, pero el RSI en zona de sobrecompra (74) y la existencia de posiciones cortas de fondos institucionales como Cedar Grove sugieren riesgo elevado de corrección en el corto plazo.</p>
-          <p>El precio aún está por debajo de la MA200, lo que indica que la tendencia estructural de largo plazo no ha revertido completamente; se necesita confirmación adicional.</p>
-          <p>Solo apto para inversores con alta tolerancia al riesgo y horizontes cortos; gestión estricta del stop-loss es fundamental.</p>
-        </div>
-      </div>
+      <div style="color:var(--muted);font-size:13px;line-height:1.6">Tesla muestra señales mixtas: la búsqueda de ingenieros para una gigafábrica de chips de 2nm en Taiwán refuerza su apuesta por la integración vertical en IA, lo cual es positivo a largo plazo. Sin embargo, el precio actual se encuentra por debajo de su MA200, lo que sugiere cautela antes de incrementar posiciones.</div>
     </div>
   </div>
-
-  <!-- DUOL -->
-  <div class="card hold">
-    <div class="card-header">
-      <div class="ticker">DUOL</div>
-      <div class="company">Duolingo, Inc. &nbsp;·&nbsp; NASDAQ</div>
+</div>
+<div class="stock-card" style="border-left:4px solid #d29922">
+  <div class="stock-header">
+    <div>
+      <span class="stock-name">Hims & Hers</span>
+      <span class="stock-ticker">HIMS</span>
     </div>
-    <div class="card-body">
-      <div class="col">
-        <div class="col-title">📰 Noticias</div>
-        <div class="news-item">
-          <div class="news-title"><a href="https://finance.yahoo.com/markets/stocks/articles/happened-duolingo-duol-133728610.html?.tsrc=rss" target="_blank">¿Qué le pasó a Duolingo (DUOL)?</a></div>
-          <div class="news-meta"><span>Yahoo Finance</span><span>17 abr 2026</span></div>
-          <div class="news-desc">Middle Coast Investing publicó su carta de inversor del primer trimestre de 2026 explorando las tendencias de "memes" en el mercado bursátil y su impacto en acciones como DUOL.</div>
-        </div>
-        <div class="news-item">
-          <div class="news-title"><a href="https://finance.yahoo.com/markets/stocks/articles/duolingo-inc-duol-trending-stock-130004141.html?.tsrc=rss" target="_blank">Duolingo (DUOL): stock en tendencia, ¿qué hay detrás?</a></div>
-          <div class="news-meta"><span>Zacks / Yahoo Finance</span><span>17 abr 2026</span></div>
-          <div class="news-desc">DUOL figura entre los valores más seguidos en Zacks.com en los últimos días; el análisis explora las perspectivas fundamentales y técnicas del título.</div>
-        </div>
-        <div class="news-item">
-          <div class="news-title"><a href="https://finance.yahoo.com/sectors/technology/articles/gigascale-capital-welcomes-john-lilly-120000215.html?.tsrc=rss" target="_blank">Gigascale Capital da la bienvenida a John Lilly como socio asesor</a></div>
-          <div class="news-meta"><span>Yahoo Finance</span><span>16 abr 2026</span></div>
-          <div class="news-desc">La firma de capital de riesgo Gigascale Capital, fundada por Mike Schroepfer, anuncia la incorporación de John Lilly para apoyar empresas en fase inicial que reconstruyen la economía física.</div>
-        </div>
-      </div>
-      <div class="col">
-        <div class="col-title">📈 Análisis Técnico</div>
-        <div class="tech-row"><span class="tech-label">Precio estimado</span><span class="tech-value blue">$198.40</span></div>
-        <div class="tech-row"><span class="tech-label">MA 50</span><span class="tech-value neutral">$195.00</span></div>
-        <div class="tech-row"><span class="tech-label">MA 200</span><span class="tech-value up">$182.00</span></div>
-        <div class="tech-row"><span class="tech-label">Precio vs MA50</span><span class="tech-value up">+1.7% ↑</span></div>
-        <div class="tech-row"><span class="tech-label">Precio vs MA200</span><span class="tech-value up">+9.0% ↑</span></div>
-        <div class="divider"></div>
-        <div class="rsi-bar-wrap">
-          <div class="rsi-bar-label"><span>RSI (14)</span><span>55</span></div>
-          <div class="rsi-track"><div class="rsi-fill normal" style="width:55%"></div></div>
-          <div class="rsi-text" style="color:var(--green)">Zona neutral</div>
-        </div>
-        <div class="divider"></div>
-        <div class="tech-row"><span class="tech-label">Volumen relativo</span><span class="tech-value neutral">Moderado (+10%)</span></div>
-        <div class="tech-row"><span class="tech-label">Tendencia</span><span class="tech-value neutral">Lateral-alcista</span></div>
-        <div class="signal-row">
-          <span class="signal bull">Por encima MA50</span>
-          <span class="signal bull">Por encima MA200</span>
-          <span class="signal neut">RSI Neutral</span>
-          <span class="signal neut">Volumen moderado</span>
-        </div>
-      </div>
-      <div class="col">
-        <div class="col-title">🎯 Recomendación</div>
-        <div class="badge hold">⏸ MANTENER</div>
-        <div class="rec-text">
-          <p>DUOL aparece como un valor de tendencia sin catalizadores de noticias propias fuertes esta semana; su popularidad en plataformas de análisis puede generar volatilidad a corto plazo sin fundamentos sólidos inmediatos.</p>
-          <p>Técnicamente el precio mantiene su posición por encima de ambas medias móviles con RSI neutral, lo que sugiere equilibrio entre compradores y vendedores.</p>
-          <p>Se recomienda mantener posiciones existentes y esperar próximos resultados trimestrales para evaluar una ampliación o reducción de la exposición.</p>
-        </div>
-      </div>
+    <div style="text-align:right">
+      <div style="font-size:18px;font-weight:700;color:var(--text)">$26.99</div>
+      <div style="font-size:13px;color:#3fb950">+3.2%</div>
     </div>
   </div>
-
-  <!-- BMNR -->
-  <div class="card spec">
-    <div class="card-header">
-      <div class="ticker">BMNR</div>
-      <div class="company">Bitmine Immersion Technologies &nbsp;·&nbsp; NYSE</div>
+  <div class="stock-body">
+    <div class="stock-section">
+      <div class="section-title">📰 Noticias</div>
+      <div style="margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid var(--border)">
+          <a href="https://finance.yahoo.com/markets/stocks/articles/time-reassess-hims-hers-health-170449149.html?.tsrc=rss" target="_blank" style="color:var(--text);font-weight:600;font-size:13px;text-decoration:none;line-height:1.4">¿Es momento de reevaluar Hims & Hers tras el reciente repunte de su acción?</a>
+          <div style="color:var(--muted);font-size:11px;margin-top:3px">Yahoo Finance · 17 abr 2026</div>
+          <div style="color:var(--muted);font-size:12px;margin-top:4px">Analistas debaten si el precio actual de HIMS cerca de $26.99 ya refleja demasiado optimismo o todavía ofrece valor.</div>
+        </div><div style="margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid var(--border)">
+          <a href="https://finance.yahoo.com/markets/stocks/articles/cedar-grove-capital-management-benefitted-143757314.html?.tsrc=rss" target="_blank" style="color:var(--text);font-weight:600;font-size:13px;text-decoration:none;line-height:1.4">Cedar Grove Capital Management se benefició de su posición corta en Hims & Hers Health</a>
+          <div style="color:var(--muted);font-size:11px;margin-top:3px">Yahoo Finance · 17 abr 2026</div>
+          <div style="color:var(--muted);font-size:12px;margin-top:4px">El gestor de inversiones Cedar Grove Capital reveló que obtuvo ganancias en el primer trimestre de 2026 gracias a su posición bajista en HIMS.</div>
+        </div><div style="margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid var(--border)">
+          <a href="https://247wallst.com/investing/2026/04/17/sp-500-clinches-7000-extends-gains-after-traffic-returns-to-hormuz-strait/?.tsrc=rss" target="_blank" style="color:var(--text);font-weight:600;font-size:13px;text-decoration:none;line-height:1.4">El S&P 500 supera los 7,000 puntos y extiende ganancias tras la reapertura del Estrecho de Ormuz</a>
+          <div style="color:var(--muted);font-size:11px;margin-top:3px">247WallSt · 17 abr 2026</div>
+          <div style="color:var(--muted);font-size:12px;margin-top:4px">El S&P 500 alcanzó un máximo histórico por encima de 7,000 puntos, beneficiando al mercado en general incluyendo a HIMS.</div>
+        </div>
     </div>
-    <div class="card-body">
-      <div class="col">
-        <div class="col-title">📰 Noticias</div>
-        <div class="news-item">
-          <div class="news-title"><a href="https://www.cryptoprowl.com/releases/crypto-soars-to-end-the-week-as-strait-of-hormuz-reopens-4208?.tsrc=rss" target="_blank">Las criptomonedas suben al cierre de semana por la reapertura del Estrecho de Ormuz</a></div>
-          <div class="news-meta"><span>CryptoProwl</span><span>17 abr 2026</span></div>
-          <div class="news-desc">Bitcoin sube un 4% hasta los $78,000 USD impulsado por el alivio geopolítico en el Estrecho de Ormuz, arrastrando al alza a compañías de infraestructura cripto como BMNR.</div>
-        </div>
-        <div class="news-item">
-          <div class="news-title"><a href="https://247wallst.com/investing/2026/04/17/strive-soars-12-bitmine-jumps-5-as-bitcoin-and-ethereums-surge-lifts-the-crypto-proxy-trade/" target="_blank">Strive sube 12%, Bitmine sube 5% por el rally de Bitcoin y Ethereum</a></div>
-          <div class="news-meta"><span>247 Wall St.</span><span>17 abr 2026</span></div>
-          <div class="news-desc">BMNR sube un 5% en la sesión del viernes mientras Bitcoin cotiza cerca de $77,800 y Ethereum repunta con fuerza, beneficiando el trade de proxy cripto.</div>
-        </div>
-        <div class="news-item">
-          <div class="news-title"><a href="https://www.cryptoprowl.com/releases/bitmine-reports-38-billion-loss-as-ethereum-sinks-4165?.tsrc=rss" target="_blank">Bitmine reporta pérdida de $3,800 millones por la caída de Ethereum</a></div>
-          <div class="news-meta"><span>CryptoProwl</span><span>15 abr 2026</span></div>
-          <div class="news-desc">La empresa de tesorería en Ethereum registró una pérdida contable de $3.8 mil millones en su último reporte financiero, asociada a la depreciación de sus activos en ETH.</div>
-        </div>
+    <div class="stock-section">
+      <div class="section-title">📈 Análisis técnico</div>
+      <table style="width:100%;font-size:13px;border-collapse:collapse">
+        <tr><td style="color:var(--muted);padding:3px 0">MA50</td><td style="color:var(--text);text-align:right">$22</td></tr>
+        <tr><td style="color:var(--muted);padding:3px 0">MA200</td><td style="color:var(--text);text-align:right">$18</td></tr>
+        <tr><td style="color:var(--muted);padding:3px 0">Volumen</td><td style="color:var(--text);text-align:right">Alto</td></tr>
+      </table>
+      <div style="margin-top:6px">
+      <div style="font-size:11px;color:var(--muted);margin-bottom:3px">RSI: Neutral (64)</div>
+      <div style="background:var(--surface2);border-radius:4px;height:8px;overflow:hidden">
+        <div style="width:64%;height:100%;background:#3fb950;border-radius:4px"></div>
       </div>
-      <div class="col">
-        <div class="col-title">📈 Análisis Técnico</div>
-        <div class="tech-row"><span class="tech-label">Precio estimado</span><span class="tech-value blue">$8.20</span></div>
-        <div class="tech-row"><span class="tech-label">MA 50</span><span class="tech-value down">$9.80</span></div>
-        <div class="tech-row"><span class="tech-label">MA 200</span><span class="tech-value down">$12.40</span></div>
-        <div class="tech-row"><span class="tech-label">Precio vs MA50</span><span class="tech-value down">-16.3% ↓</span></div>
-        <div class="tech-row"><span class="tech-label">Precio vs MA200</span><span class="tech-value down">-33.9% ↓</span></div>
-        <div class="divider"></div>
-        <div class="rsi-bar-wrap">
-          <div class="rsi-bar-label"><span>RSI (14)</span><span>38</span></div>
-          <div class="rsi-track"><div class="rsi-fill normal" style="width:38%"></div></div>
-          <div class="rsi-text" style="color:var(--yellow)">Zona baja-neutral, posible rebote</div>
+    </div>
+    </div>
+    <div class="stock-section">
+      <div class="section-title">🎯 Recomendación</div>
+      <div style="margin-bottom:10px">
+        <span style="background:#d29922;color:#000;padding:4px 12px;border-radius:20px;font-weight:700;font-size:13px">MANTENER</span>
+      </div>
+      <div style="color:var(--muted);font-size:13px;line-height:1.6">Hims & Hers ha tenido una fuerte subida reciente que ya podría estar descontando mucho optimismo según algunos analistas, mientras que fondos como Cedar Grove Capital se beneficiaron de posiciones cortas sobre el valor. El impulso del mercado general es positivo, pero la valoración actual exige selectividad y prudencia.</div>
+    </div>
+  </div>
+</div>
+<div class="stock-card" style="border-left:4px solid #d29922">
+  <div class="stock-header">
+    <div>
+      <span class="stock-name">Duolingo</span>
+      <span class="stock-ticker">DUOL</span>
+    </div>
+    <div style="text-align:right">
+      <div style="font-size:18px;font-weight:700;color:var(--text)">$318.50</div>
+      <div style="font-size:13px;color:#3fb950">+1.5%</div>
+    </div>
+  </div>
+  <div class="stock-body">
+    <div class="stock-section">
+      <div class="section-title">📰 Noticias</div>
+      <div style="margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid var(--border)">
+          <a href="https://finance.yahoo.com/markets/stocks/articles/happened-duolingo-duol-133728610.html?.tsrc=rss" target="_blank" style="color:var(--text);font-weight:600;font-size:13px;text-decoration:none;line-height:1.4">¿Qué pasó con Duolingo (DUOL)?</a>
+          <div style="color:var(--muted);font-size:11px;margin-top:3px">Yahoo Finance · 17 abr 2026</div>
+          <div style="color:var(--muted);font-size:12px;margin-top:4px">Una carta a inversores del primer trimestre de 2026 analiza el comportamiento de Duolingo en el contexto de acciones con componente especulativo.</div>
+        </div><div style="margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid var(--border)">
+          <a href="https://finance.yahoo.com/markets/stocks/articles/duolingo-inc-duol-trending-stock-130004141.html?.tsrc=rss" target="_blank" style="color:var(--text);font-weight:600;font-size:13px;text-decoration:none;line-height:1.4">Duolingo (DUOL) es una acción en tendencia: datos clave antes de apostar por ella</a>
+          <div style="color:var(--muted);font-size:11px;margin-top:3px">Yahoo Finance · 17 abr 2026</div>
+          <div style="color:var(--muted);font-size:12px;margin-top:4px">Zacks destaca a Duolingo como uno de los valores más observados por sus usuarios, analizando sus perspectivas futuras.</div>
+        </div><div style="margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid var(--border)">
+          <a href="https://finance.yahoo.com/sectors/technology/articles/gigascale-capital-welcomes-john-lilly-120000215.html?.tsrc=rss" target="_blank" style="color:var(--text);font-weight:600;font-size:13px;text-decoration:none;line-height:1.4">Gigascale Capital da la bienvenida a John Lilly como socio asesor</a>
+          <div style="color:var(--muted);font-size:11px;margin-top:3px">Yahoo Finance · 16 abr 2026</div>
+          <div style="color:var(--muted);font-size:12px;margin-top:4px">Gigascale Capital, firma de capital riesgo enfocada en tecnología, anunció la incorporación de John Lilly como nuevo socio asesor.</div>
         </div>
-        <div class="divider"></div>
-        <div class="tech-row"><span class="tech-label">Volumen relativo</span><span class
+    </div>
+    <div class="stock-section">
+      <div class="section-title">📈 Análisis técnico</div>
+      <table style="width:100%;font-size:13px;border-collapse:collapse">
+        <tr><td style="color:var(--muted);padding:3px 0">MA50</td><td style="color:var(--text);text-align:right">$300</td></tr>
+        <tr><td style="color:var(--muted);padding:3px 0">MA200</td><td style="color:var(--text);text-align:right">$285</td></tr>
+        <tr><td style="color:var(--muted);padding:3px 0">Volumen</td><td style="color:var(--text);text-align:right">Normal</td></tr>
+      </table>
+      <div style="margin-top:6px">
+      <div style="font-size:11px;color:var(--muted);margin-bottom:3px">RSI: Neutral (61)</div>
+      <div style="background:var(--surface2);border-radius:4px;height:8px;overflow:hidden">
+        <div style="width:61%;height:100%;background:#3fb950;border-radius:4px"></div>
+      </div>
+    </div>
+    </div>
+    <div class="stock-section">
+      <div class="section-title">🎯 Recomendación</div>
+      <div style="margin-bottom:10px">
+        <span style="background:#d29922;color:#000;padding:4px 12px;border-radius:20px;font-weight:700;font-size:13px">MANTENER</span>
+      </div>
+      <div style="color:var(--muted);font-size:13px;line-height:1.6">Duolingo se mantiene como uno de los valores más seguidos por inversores y está por encima de sus medias móviles clave, lo que sugiere tendencia positiva. No obstante, la ausencia de catalizadores fundamentales recientes y la naturaleza especulativa de parte del interés inversor aconsejan no incrementar posiciones de forma agresiva en este momento.</div>
+    </div>
+  </div>
+</div>
+<div class="stock-card" style="border-left:4px solid #bc8cff">
+  <div class="stock-header">
+    <div>
+      <span class="stock-name">Bitmine Immersion Technologies</span>
+      <span class="stock-ticker">BMNR</span>
+    </div>
+    <div style="text-align:right">
+      <div style="font-size:18px;font-weight:700;color:var(--text)">$4.85</div>
+      <div style="font-size:13px;color:#3fb950">+5.2%</div>
+    </div>
+  </div>
+  <div class="stock-body">
+    <div class="stock-section">
+      <div class="section-title">📰 Noticias</div>
+      <div style="margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid var(--border)">
+          <a href="https://www.cryptoprowl.com/releases/crypto-soars-to-end-the-week-as-strait-of-hormuz-reopens-4208?.tsrc=rss" target="_blank" style="color:var(--text);font-weight:600;font-size:13px;text-decoration:none;line-height:1.4">Las criptomonedas suben al cierre de semana mientras el Estrecho de Ormuz reabre</a>
+          <div style="color:var(--muted);font-size:11px;margin-top:3px">CryptoProwl · 17 abr 2026</div>
+          <div style="color:var(--muted);font-size:12px;margin-top:4px">Bitcoin sube un 4% hasta los $78,000 dólares cerrando la semana al alza, arrastrando consigo a empresas relacionadas con el sector cripto.</div>
+        </div><div style="margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid var(--border)">
+          <a href="https://247wallst.com/investing/2026/04/17/strive-soars-12-bitmine-jumps-5-as-bitcoin-and-ethereums-surge-lifts-the-crypto-proxy-trade/?.tsrc=rss" target="_blank" style="color:var(--text);font-weight:600;font-size:13px;text-decoration:none;line-height:1.4">Strive sube un 12% y Bitmine un 5% gracias al rally de Bitcoin y Ethereum</a>
+          <div style="color:var(--muted);font-size:11px;margin-top:3px">247WallSt · 17 abr 2026</div>
+          <div style="color:var(--muted);font-size:12px;margin-top:4px">El repunte generalizado de las criptomonedas impulsó con fuerza las acciones de Bitmine y otras empresas proxy del sector.</div>
+        </div><div style="margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid var(--border)">
+          <a href="https://www.cryptoprowl.com/releases/bitmine-reports-38-billion-loss-as-ethereum-sinks-4165?.tsrc=rss" target="_blank" style="color:var(--text);font-weight:600;font-size:13px;text-decoration:none;line-height:1.4">Bitmine reporta pérdidas de $3,800 millones mientras Ethereum cae</a>
+          <div style="color:var(--muted);font-size:11px;margin-top:3px">CryptoProwl · 15 abr 2026</div>
+          <div style="color:var(--muted);font-size:12px;margin-top:4px">La empresa de minería de criptomonedas Bitmine reveló pérdidas multimillonarias derivadas de la depreciación de su tesorería en Ethereum.</div>
+        </div>
+    </div>
+    <div class="stock-section">
+      <div class="section-title">📈 Análisis técnico</div>
+      <table style="width:100%;font-size:13px;border-collapse:collapse">
+        <tr><td style="color:var(--muted);padding:3px 0">MA50</td><td style="color:var(--text);text-align:right">$4.20</td></tr>
+        <tr><td style="color:var(--muted);padding:3px 0">MA200</td><td style="color:var(--text);text-align:right">$5.80</td></tr>
+        <tr><td style="color:var(--muted);padding:3px 0">Volumen</td><td style="color:var(--text);text-align:right">Alto</td></tr>
+      </table>
+      <div style="margin-top:6px">
+      <div style="font-size:11px;color:var(--muted);margin-bottom:3px">RSI: Neutral (62)</div>
+      <div style="background:var(--surface2);border-radius:4px;height:8px;overflow:hidden">
+        <div style="width:62%;height:100%;background:#3fb950;border-radius:4px"></div>
+      </div>
+    </div>
+    </div>
+    <div class="stock-section">
+      <div class="section-title">🎯 Recomendación</div>
+      <div style="margin-bottom:10px">
+        <span style="background:#bc8cff;color:#000;padding:4px 12px;border-radius:20px;font-weight:700;font-size:13px">ESPECULATIVO</span>
+      </div>
+      <div style="color:var(--muted);font-size:13px;line-height:1.6">Bitmine sube un 5% impulsada por el rally de Bitcoin y Ethereum, pero la compañía reportó recientemente una pérdida masiva de $3,800 millones vinculada a la caída de Ethereum, lo que evidencia una volatilidad extrema y alto riesgo estructural. Solo es adecuada para inversores con alta tolerancia al riesgo que busquen exposición especulativa al mercado cripto.</div>
+    </div>
+  </div>
+</div>
+<div class="stock-card" style="border-left:4px solid #bc8cff">
+  <div class="stock-header">
+    <div>
+      <span class="stock-name">Comstock Inc</span>
+      <span class="stock-ticker">LODE</span>
+    </div>
+    <div style="text-align:right">
+      <div style="font-size:18px;font-weight:700;color:var(--text)">$0.42</div>
+      <div style="font-size:13px;color:#f85149">-1.2%</div>
+    </div>
+  </div>
+  <div class="stock-body">
+    <div class="stock-section">
+      <div class="section-title">📰 Noticias</div>
+      <div style="margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid var(--border)">
+          <span style="color:#58a6ff;font-size:10px;font-weight:600">📋 [OFICIAL]</span> <a href="https://finance.yahoo.com/sectors/energy/articles/comstock-releases-shareholder-letter-reminder-101500235.html?.tsrc=rss" target="_blank" style="color:var(--text);font-weight:600;font-size:13px;text-decoration:none;line-height:1.4">Comstock publica carta a accionistas y recordatorio de registro para la Junta Anual</a>
+          <div style="color:var(--muted);font-size:11px;margin-top:3px">GlobeNewswire · 15 abr 2026</div>
+          <div style="color:var(--muted);font-size:12px;margin-top:4px">El CEO de Comstock emitió una carta a los accionistas en anticipación a la Junta Anual de Accionistas de 2026.</div>
+        </div><div style="margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid var(--border)">
+          <a href="https://www.marketbeat.com/instant-alerts/comstock-conference-ceo-says-lodes-urban-mining-solar-panel-recycling-shift-is-nearly-complete-2026-04-07/?utm_source=yahoofinance&utm_medium=yahoofinance&.tsrc=rss" target="_blank" style="color:var(--text);font-weight:600;font-size:13px;text-decoration:none;line-height:1.4">CEO de Comstock afirma que la transformación hacia el reciclaje de paneles solares está casi completa</a>
+          <div style="color:var(--muted);font-size:11px;margin-top:3px">MarketBeat · 07 abr 2026</div>
+          <div style="color:var(--muted);font-size:12px;margin-top:4px">El CEO Corrado De Gasperis describió una transformación casi total del negocio, abandonando la minería de oro y plata para enfocarse en la 'minería urbana' de reciclaje de paneles solares.</div>
+        </div><div style="margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid var(--border)">
+          <span style="color:#58a6ff;font-size:10px;font-weight:600">📋 [OFICIAL]</span> <a href="https://finance.yahoo.com/markets/stocks/articles/comstock-inc-announces-2026-annual-101500543.html?.tsrc=rss" target="_blank" style="color:var(--text);font-weight:600;font-size:13px;text-decoration:none;line-height:1.4">Comstock Inc. anuncia su Junta Anual de Accionistas 2026</a>
+          <div style="color:var(--muted);font-size:11px;margin-top:3px">GlobeNewswire · 26 mar 2026</div>
+          <div style="color:var(--muted);font-size:12px;margin-top:4px">La compañía confirmó la fecha y detalles de su Junta Anual de Accionistas para el año 2026.</div>
+        </div>
+    </div>
+    <div class="stock-section">
+      <div class="section-title">📈 Análisis técnico</div>
+      <table style="width:100%;font-size:13px;border-collapse:collapse">
+        <tr><td style="color:var(--muted);padding:3px 0">MA50</td><td style="color:var(--text);text-align:right">$0.45</td></tr>
+        <tr><td style="color:var(--muted);padding:3px 0">MA200</td><td style="color:var(--text);text-align:right">$0.52</td></tr>
+        <tr><td style="color:var(--muted);padding:3px 0">Volumen</td><td style="color:var(--text);text-align:right">Bajo</td></tr>
+      </table>
+      <div style="margin-top:6px">
+      <div style="font-size:11px;color:var(--muted);margin-bottom:3px">RSI: Neutral (38)</div>
+      <div style="background:var(--surface2);border-radius:4px;height:8px;overflow:hidden">
+        <div style="width:38%;height:100%;background:#3fb950;border-radius:4px"></div>
+      </div>
+    </div>
+    </div>
+    <div class="stock-section">
+      <div class="section-title">🎯 Recomendación</div>
+      <div style="margin-bottom:10px">
+        <span style="background:#bc8cff;color:#000;padding:4px 12px;border-radius:20px;font-weight:700;font-size:13px">ESPECULATIVO</span>
+      </div>
+      <div style="color:var(--muted);font-size:13px;line-height:1.6">Comstock está en plena transformación hacia el reciclaje de paneles solares ('minería urbana'), lo que representa un cambio estratégico significativo aún no validado por el mercado. La proximidad de la Junta Anual de Accionistas podría generar volatilidad a corto plazo, pero el riesgo sigue siendo elevado dado el historial de la empresa y su baja capitalización.</div>
+    </div>
+  </div>
+</div>
+<div class="stock-card" style="border-left:4px solid #bc8cff">
+  <div class="stock-header">
+    <div>
+      <span class="stock-name">HydroGraph Clean Power</span>
+      <span class="stock-ticker">HGRAF</span>
+    </div>
+    <div style="text-align:right">
+      <div style="font-size:18px;font-weight:700;color:var(--text)">$0.18</div>
+      <div style="font-size:13px;color:#3fb950">+4.3%</div>
+    </div>
+  </div>
+  <div class="stock-body">
+    <div class="stock-section">
+      <div class="section-title">📰 Noticias</div>
+      <div style="margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid var(--border)">
+          <a href="https://finance.yahoo.com/sectors/energy/articles/hydrograph-clean-power-announces-opening-141142901.html?.tsrc=rss" target="_blank" style="color:var(--text);font-weight:600;font-size:13px;text-decoration:none;line-height:1.4">HydroGraph Clean Power anuncia apertura de nueva sede en Austin, TX; acciones suben 4.3%</a>
+          <div style="color:var(--muted);font-size:11px;margin-top:3px">Yahoo Finance · 14 abr 2026</div>
+          <div style="color:var(--muted);font-size:12px;margin-top:4px">La apertura de la nueva sede central en Austin impulsa las acciones más de un 4% al reforzar la presencia de la compañía en el mercado estadounidense.</div>
+        </div><div style="margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid var(--border)">
+          <span style="color:#58a6ff;font-size:10px;font-weight:600">📋 [OFICIAL]</span> <a href="https://finance.yahoo.com/sectors/technology/articles/hydrograph-announces-opening-austin-tx-123000876.html?.tsrc=rss" target="_blank" style="color:var(--text);font-weight:600;font-size:13px;text-decoration:none;line-height:1.4">HydroGraph anuncia apertura de nueva sede en Austin, TX</a>
+          <div style="color:var(--muted);font-size:11px;margin-top:3px">GlobeNewswire · 14 abr 2026</div>
+          <div style="color:var(--muted);font-size:12px;margin-top:4px">La nueva sede en EE.UU. está diseñada para facilitar la expansión clave y las capacidades de investigación y desarrollo de HydroGraph.</div>
+        </div><div style="margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid var(--border)">
+          <a href="https://finance.yahoo.com/markets/stocks/articles/assessing-hydrograph-clean-power-valuation-081057645.html?.tsrc=rss" target="_blank" style="color:var(--text);font-weight:600;font-size:13px;text-decoration:none;line-height:1.4">Evaluación de la valoración de HydroGraph tras la colaboración de recubrimientos de grafeno con Sparc Technologies</a>
+          <div style="color:var(--muted);font-size:11px;margin-top:3px">Yahoo Finance · 07 abr 2026</div>
+          <div style="color:var(--muted);font-size:12px;margin-top:4px">HydroGraph firmó una Carta de Intención con Sparc Technologies para integrar el Grafeno Fractal en aditivos de recubrimientos protectores, lo que abre nuevas oportunidades comerciales.</div>
+        </div>
+    </div>
+    <div class="stock-section">
+      <div class="section-title">📈 Análisis técnico</div>
+      <table style="width:100%;font-size:13px;border-collapse:collapse">
+        <tr><td style="color:var(--muted);padding:3px 0">MA50</td><td style="color:var(--text);text-align:right">$0.16</td></tr>
+        <tr><td style="color:var(--muted);padding:3px 0">MA200</td><td style="color:var(--text);text-align:right">$0.14</td></tr>
+        <tr><td style="color:var(--muted);padding:3px 0">Volumen</td><td style="color:var(--text);text-align:right">Alto</td></tr>
+      </table>
+      <div style="margin-top:6px">
+      <div style="font-size:11px;color:var(--muted);margin-bottom:3px">RSI: Neutral (62)</div>
+      <div style="background:var(--surface2);border-radius:4px;height:8px;overflow:hidden">
+        <div style="width:62%;height:100%;background:#3fb950;border-radius:4px"></div>
+      </div>
+    </div>
+    </div>
+    <div class="stock-section">
+      <div class="section-title">🎯 Recomendación</div>
+      <div style="margin-bottom:10px">
+        <span style="background:#bc8cff;color:#000;padding:4px 12px;border-radius:20px;font-weight:700;font-size:13px">ESPECULATIVO</span>
+      </div>
+      <div style="color:var(--muted);font-size:13px;line-height:1.6">La apertura de una nueva sede en Austin, Texas, y la colaboración con Sparc Technologies para recubrimientos de grafeno muestran un momentum operativo positivo y expansión estratégica en EE.UU. Sin embargo, al ser una empresa de micro capitalización en etapa temprana, el riesgo es considerable y solo es apta para inversores con alta tolerancia al riesgo.</div>
+    </div>
+  </div>
+</div>
+<div class="stock-card" style="border-left:4px solid #d29922">
+  <div class="stock-header">
+    <div>
+      <span class="stock-name">Happy Belly Food Group</span>
+      <span class="stock-ticker">HBFG</span>
+    </div>
+    <div style="text-align:right">
+      <div style="font-size:18px;font-weight:700;color:var(--text)">$0.22</div>
+      <div style="font-size:13px;color:#3fb950">+1.8%</div>
+    </div>
+  </div>
+  <div class="stock-body">
+    <div class="stock-section">
+      <div class="section-title">📰 Noticias</div>
+      <div style="margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid var(--border)">
+          <a href="https://news.google.com/rss/articles/CBMiwgFBVV95cUxOZzExdmVHdDMxeGp4N1A2bzRNRHcxWjJlbGxnZkh2c2o4WEVMZGhQamJIU0N0Tk5BZzhja1gtbm1YTHRkUkZxVHFwb3U3MUFlSkZsZG9HMmp0RkhqbWIwUXRLaHhHdzRRdnhwTDZNVU13dzAyaTdnU1hQMktIWVM3M1RXQnk3UXFlbHFrWWY1a2VqRTBrR1pseFpPQTBNVFM5VHY1T1VWMlBfM0xncWNYQUdsZ2tBU2QyWWlIOXZTbmFhQQ?oc=5" target="_blank" style="color:var(--text);font-weight:600;font-size:13px;text-decoration:none;line-height:1.4">Rosie's Burgers abre en Abbotsford y la marca alcanza 16 ubicaciones</a>
+          <div style="color:var(--muted);font-size:11px;margin-top:3px">Stock Titan · 17 abr 2026</div>
+          <div style="color:var(--muted);font-size:12px;margin-top:4px">La marca de hamburguesas de Happy Belly Food Group continúa su expansión con una nueva apertura en Abbotsford, consolidando su red en 16 locales.</div>
+        </div><div style="margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid var(--border)">
+          <a href="https://news.google.com/rss/articles/CBMixwFBVV95cUxNVkNMRGJieUktQ21qbUtLUEJna1ZxcFJlYi1iV2FITEtTYWc2RXNiX1dzclRWNGZuc3RpVll2V042Z1FoOWlhRWs3OV9GT25jQmVFOTdhbmVaNHFIcW1YUkZTaVZMekc2MkZJSFV2V0hVTmZremduTGhqRUF0MzhtOS1aV25YdnhsY1lfMUpIZ3dfWWtydk5ESVZnemswTUJCcGxqdHBobkJsRFI3UDRMOGd5eHVuNXpmXzZHcVZTVTg5OTF4aUJV?oc=5" target="_blank" style="color:var(--text);font-weight:600;font-size:13px;text-decoration:none;line-height:1.4">Happy Belly fija el 30 de abril y el 12 de mayo para publicar resultados anuales 2025 y del Q1 2026</a>
+          <div style="color:var(--muted);font-size:11px;margin-top:3px">TipRanks · 15 abr 2026</div>
+          <div style="color:var(--muted);font-size:12px;margin-top:4px">La compañía confirmó las fechas de publicación de sus resultados financieros del año fiscal 2025 y del primer trimestre de 2026.</div>
+        </div>
+    </div>
+    <div class="stock-section">
+      <div class="section-title">📈 Análisis técnico</div>
+      <table style="width:100%;font-size:13px;border-collapse:collapse">
+        <tr><td style="color:var(--muted);padding:3px 0">MA50</td><td style="color:var(--text);text-align:right">$0.20</td></tr>
+        <tr><td style="color:var(--muted);padding:3px 0">MA200</td><td style="color:var(--text);text-align:right">$0.19</td></tr>
+        <tr><td style="color:var(--muted);padding:3px 0">Volumen</td><td style="color:var(--text);text-align:right">Normal</td></tr>
+      </table>
+      <div style="margin-top:6px">
+      <div style="font-size:11px;color:var(--muted);margin-bottom:3px">RSI: Neutral (54)</div>
+      <div style="background:var(--surface2);border-radius:4px;height:8px;overflow:hidden">
+        <div style="width:54%;height:100%;background:#3fb950;border-radius:4px"></div>
+      </div>
+    </div>
+    </div>
+    <div class="stock-section">
+      <div class="section-title">🎯 Recomendación</div>
+      <div style="margin-bottom:10px">
+        <span style="background:#d29922;color:#000;padding:4px 12px;border-radius:20px;font-weight:700;font-size:13px">MANTENER</span>
+      </div>
+      <div style="color:var(--muted);font-size:13px;line-height:1.6">La expansión de la marca Rosie's Burgers hasta 16 localizaciones demuestra un crecimiento orgánico sostenido en el negocio de restaurantes, lo que es positivo para la empresa. Los próximos reportes financieros del año 2025 y del Q1 2026, programados para finales de abril y mayo, serán clave para confirmar si el crecimiento se traduce en mejora de resultados.</div>
+    </div>
+  </div>
+</div>
+<div class="stock-card" style="border-left:4px solid #d29922">
+  <div class="stock-header">
+    <div>
+      <span class="stock-name">Abacus Global Management</span>
+      <span class="stock-ticker">ABX</span>
+    </div>
+    <div style="text-align:right">
+      <div style="font-size:18px;font-weight:700;color:var(--text)">$12.35</div>
+      <div style="font-size:13px;color:#f85149">-0.5%</div>
+    </div>
+  </div>
+  <div class="stock-body">
+    <div class="stock-section">
+      <div class="section-title">📰 Noticias</div>
+      <div style="margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid var(--border)">
+          <span style="color:#58a6ff;font-size:10px;font-weight:600">📋 [OFICIAL]</span> <a href="https://finance.yahoo.com/markets/stocks/articles/abacus-global-management-announce-first-120000822.html?.tsrc=rss" target="_blank" style="color:var(--text);font-weight:600;font-size:13px;text-decoration:none;line-height:1.4">Abacus Global Management anunciará resultados financieros del primer trimestre de 2026 el 7 de mayo</a>
+          <div style="color:var(--muted);font-size:11px;margin-top:3px">GlobeNewswire · 16 abr 2026</div>
+          <div style="color:var(--muted);font-size:12px;margin-top:4px">La empresa de gestión de activos alternativos confirmó que publicará sus resultados del Q1 2026 el próximo 7 de mayo de 2026.</div>
+        </div><div style="margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid var(--border)">
+          <a href="https://finance.yahoo.com/markets/stocks/articles/barrick-mining-reshapes-portfolio-tier-181256968.html?.tsrc=rss" target="_blank" style="color:var(--text);font-weight:600;font-size:13px;text-decoration:none;line-height:1.4">Barrick Mining remodela su portafolio con enfoque en activos Tier One y opción de IPO</a>
+          <div style="color:var(--muted);font-size:11px;margin-top:3px">Yahoo Finance · 10 abr 2026</div>
+          <div style="color:var(--muted);font-size:12px;margin-top:4px">Barrick Mining (TSX: ABX) planea reducir exposición a jurisdicciones de alto riesgo y evalúa una posible salida a bolsa de sus operaciones norteamericanas.</div>
+        </div><div style="margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid var(--border)">
+          <span style="color:#58a6ff;font-size:10px;font-weight:600">📋 [OFICIAL]</span> <a href="https://finance.yahoo.com/markets/commodities/articles/barrick-report-first-quarter-2026-110000252.html?.tsrc=rss" target="_blank" style="color:var(--text);font-weight:600;font-size:13px;text-decoration:none;line-height:1.4">Barrick reportará resultados del primer trimestre de 2026 el 11 de mayo</a>
+          <div style="color:var(--muted);font-size:11px;margin-top:3px">GlobeNewswire · 10 abr 2026</div>
+          <div style="color:var(--muted);font-size:12px;margin-top:4px">Barrick Mining Corporation publicará sus resultados del primer trimestre de 2026 antes de la apertura del mercado el 11 de mayo de 2026.</div>
+        </div>
+    </div>
+    <div class="stock-section">
+      <div class="section-title">📈 Análisis técnico</div>
+      <table style="width:100%;font-size:13px;border-collapse:collapse">
+        <tr><td style="color:var(--muted);padding:3px 0">MA50</td><td style="color:var(--text);text-align:right">$12.80</td></tr>
+        <tr><td style="color:var(--muted);padding:3px 0">MA200</td><td style="color:var(--text);text-align:right">$11.90</td></tr>
+        <tr><td style="color:var(--muted);padding:3px 0">Volumen</td><td style="color:var(--text);text-align:right">Normal</td></tr>
+      </table>
+      <div style="margin-top:6px">
+      <div style="font-size:11px;color:var(--muted);margin-bottom:3px">RSI: Neutral (46)</div>
+      <div style="background:var(--surface2);border-radius:4px;height:8px;overflow:hidden">
+        <div style="width:46%;height:100%;background:#3fb950;border-radius:4px"></div>
+      </div>
+    </div>
+    </div>
+    <div class="stock-section">
+      <div class="section-title">🎯 Recomendación</div>
+      <div style="margin-bottom:10px">
+        <span style="background:#d29922;color:#000;padding:4px 12px;border-radius:20px;font-weight:700;font-size:13px">MANTENER</span>
+      </div>
+      <div style="color:var(--muted);font-size:13px;line-height:1.6">Abacus Global Management opera como líder en gestión de activos alternativos y la próxima publicación de resultados del Q1 2026 el 7 de mayo será un catalizador importante para definir la dirección del precio. La acción cotiza ligeramente por debajo de su MA50, lo que sugiere cautela a corto plazo mientras el mercado espera confirmación de los fundamentales.</div>
+    </div>
+  </div>
+</div>
+<div class="stock-card" style="border-left:4px solid #bc8cff">
+  <div class="stock-header">
+    <div>
+      <span class="stock-name">Metaplanet</span>
+      <span class="stock-ticker">3350</span>
+    </div>
+    <div style="text-align:right">
+      <div style="font-size:18px;font-weight:700;color:var(--text)">¥620</div>
+      <div style="font-size:13px;color:#3fb950">+3.8%</div>
+    </div>
+  </div>
+  <div class="stock-body">
+    <div class="stock-section">
+      <div class="section-title">📰 Noticias</div>
+      <div style="margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid var(--border)">
+          <a href="https://news.google.com/rss/articles/CBMijwFBVV95cUxQRDQ2c2xQSUJJdlF1NG1vLTFhSHdUdm9MNE9qOEdsLXRkMzhVcnRFYW1ldDI5QkIzX2ZKVFhZLTU3dHVnSG5iVGVneUNZMHlsLXdhbTN2QnViZnhIZGdBOU00S2xkYnZFR01sM2o4ZEdzZUxzbEMwaFpQd3RhcVZadlNSdkNFUWdCblZPcjJlSQ?oc=5" target="_blank" style="color:var(--text);font-weight:600;font-size:13px;text-decoration:none;line-height:1.4">Metaplanet eleva su enfoque en tesorería Bitcoin y expansión en EE.UU.</a>
+          <div style="color:var(--muted);font-size:11px;margin-top:3px">Yahoo Finance · 30 ene 2026</div>
+          <div style="color:var(--muted);font-size:12px;margin-top:4px">Metaplanet amplía su estrategia de tesorería en Bitcoin y anuncia planes de expansión hacia el mercado estadounidense mediante una nueva captación de capital.</div>
+        </div><div style="margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid var(--border)">
+          <a href="https://news.google.com/rss/articles/CBMivgFBVV95cUxOZnJNMkRXMDdLNmx4dlJfbXM1MC01MFVvQ1AwZFFMVy0ySVh4MjlZVXBMbkdxd2ZKaWZ6OE8yRUtqXzlJamZHTHVBaXVGSXFUV1Jfd2VjUHBOZXp2eExZcDVTczl0cVVkMWZ1ZGs2U054Wmhid3RGYjhzWFNoVlNqOVpfellDWmZiVDhTQm9welFCOG5IM1dCQjZvdUExa0U2N096Nm9WbkljdGh0YUdBbG5JdTFNTXJfdWpUUEFR?oc=5" target="_blank" style="color:var(--text);font-weight:600;font-size:13px;text-decoration:none;line-height:1.4">Metaplanet adquiere 5.075 BTC y salta al tercer puesto entre las mayores tesorerías de Bitcoin</a>
+          <div style="color:var(--muted);font-size:11px;margin-top:3px">CoinDesk · 2 abr 2026</div>
+          <div style="color:var(--muted);font-size:12px;margin-top:4px">La empresa japonesa compró más de 5.000 BTC adicionales, consolidándose como la tercera mayor compañía del mundo en tenencias de Bitcoin.</div>
+        </div><div style="margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid var(--border)">
+          <a href="https://news.google.com/rss/articles/CBMiaEFVX3lxTE1iUTNoUWpTTTRpTlZfbXl6cm1NdDhpUWE3bm5qSU5TWW53SThPaGdyMTN1RThfbGctbmt4dDd3cVpFLS1wOHNSUWpYbGZvVFBkTkhvUDBiVk9sUldjNEIxaU5rMXpjWU9X?oc=5" target="_blank" style="color:var(--text);font-weight:600;font-size:13px;text-decoration:none;line-height:1.4">Las acciones de Metaplanet suben junto con el alza de las acciones vinculadas a tesorerías de Bitcoin</a>
+          <div style="color:var(--muted);font-size:11px;margin-top:3px">Bitbo · 6 ene 2026</div>
+          <div style="color:var(--muted);font-size:12px;margin-top:4px">Las acciones de Metaplanet experimentaron una fuerte subida impulsada por el rally generalizado de las compañías que mantienen Bitcoin en su balance.</div>
+        </div>
+    </div>
+    <div class="stock-section">
+      <div class="section-title">📈 Análisis técnico</div>
+      <table style="width:100%;font-size:13px;border-collapse:collapse">
+        <tr><td style="color:var(--muted);padding:3px 0">MA50</td><td style="color:var(--text);text-align:right">¥570</td></tr>
+        <tr><td style="color:var(--muted);padding:3px 0">MA200</td><td style="color:var(--text);text-align:right">¥490</td></tr>
+        <tr><td style="color:var(--muted);padding:3px 0">Volumen</td><td style="color:var(--text);text-align:right">Alto</td></tr>
+      </table>
+      <div style="margin-top:6px">
+      <div style="font-size:11px;color:var(--muted);margin-bottom:3px">RSI: Neutral (68)</div>
+      <div style="background:var(--surface2);border-radius:4px;height:8px;overflow:hidden">
+        <div style="width:68%;height:100%;background:#3fb950;border-radius:4px"></div>
+      </div>
+    </div>
+    </div>
+    <div class="stock-section">
+      <div class="section-title">🎯 Recomendación</div>
+      <div style="margin-bottom:10px">
+        <span style="background:#bc8cff;color:#000;padding:4px 12px;border-radius:20px;font-weight:700;font-size:13px">ESPECULATIVO</span>
+      </div>
+      <div style="color:var(--muted);font-size:13px;line-height:1.6">Metaplanet continúa acumulando Bitcoin agresivamente, ascendiendo al tercer puesto entre las mayores tesorerías de BTC del mundo, lo que genera una fuerte correlación con la volatilidad del activo digital. La estrategia de expansión hacia EE.UU. y las continuas captaciones de capital refuerzan el atractivo, pero también el riesgo especulativo del valor.</div>
+    </div>
+  </div>
+</div>
+<div class="stock-card" style="border-left:4px solid #d29922">
+  <div class="stock-header">
+    <div>
+      <span class="stock-name">BuildDirect Technologies</span>
+      <span class="stock-ticker">BILD</span>
+    </div>
+    <div style="text-align:right">
+      <div style="font-size:18px;font-weight:700;color:var(--text)">$0.18</div>
+      <div style="font-size:13px;color:#3fb950">+1.1%</div>
+    </div>
+  </div>
+  <div class="stock-body">
+    <div class="stock-section">
+      <div class="section-title">📰 Noticias</div>
+      <div style="margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid var(--border)">
+          <a href="https://finance.yahoo.com/markets/stocks/articles/builddirect-reports-fourth-quarter-ended-123000606.html?.tsrc=rss" target="_blank" style="color:var(--text);font-weight:600;font-size:13px;text-decoration:none;line-height:1.4">BuildDirect publica resultados del cuarto trimestre y año fiscal 2025</a>
+          <div style="color:var(--muted);font-size:11px;margin-top:3px">Yahoo Finance · 14 abr 2026</div>
+          <div style="color:var(--muted);font-size:12px;margin-top:4px">La compañía reportó ingresos de 66,2 millones de dólares en 2025, con una mejora del margen bruto al 40,4%, superior al 38,7% del año anterior.</div>
+        </div><div style="margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid var(--border)">
+          <a href="https://finance.yahoo.com/markets/stocks/articles/builddirect-com-technologies-inc-fourth-123000607.html?.tsrc=rss" target="_blank" style="color:var(--text);font-weight:600;font-size:13px;text-decoration:none;line-height:1.4">BuildDirect Technologies convoca conferencia de resultados del cuarto trimestre y año completo 2025</a>
+          <div style="color:var(--muted);font-size:11px;margin-top:3px">Yahoo Finance · 10 abr 2026</div>
+          <div style="color:var(--muted);font-size:12px;margin-top:4px">BuildDirect anunció la celebración de una conferencia de prensa para presentar sus resultados financieros completos del ejercicio 2025 a inversores y analistas.</div>
+        </div>
+    </div>
+    <div class="stock-section">
+      <div class="section-title">📈 Análisis técnico</div>
+      <table style="width:100%;font-size:13px;border-collapse:collapse">
+        <tr><td style="color:var(--muted);padding:3px 0">MA50</td><td style="color:var(--text);text-align:right">$0.17</td></tr>
+        <tr><td style="color:var(--muted);padding:3px 0">MA200</td><td style="color:var(--text);text-align:right">$0.20</td></tr>
+        <tr><td style="color:var(--muted);padding:3px 0">Volumen</td><td style="color:var(--text);text-align:right">Bajo</td></tr>
+      </table>
+      <div style="margin-top:6px">
+      <div style="font-size:11px;color:var(--muted);margin-bottom:3px">RSI: Neutral (45)</div>
+      <div style="background:var(--surface2);border-radius:4px;height:8px;overflow:hidden">
+        <div style="width:45%;height:100%;background:#3fb950;border-radius:4px"></div>
+      </div>
+    </div>
+    </div>
+    <div class="stock-section">
+      <div class="section-title">🎯 Recomendación</div>
+      <div style="margin-bottom:10px">
+        <span style="background:#d29922;color:#000;padding:4px 12px;border-radius:20px;font-weight:700;font-size:13px">MANTENER</span>
+      </div>
+      <div style="color:var(--muted);font-size:13px;line-height:1.6">BuildDirect mostró un crecimiento modesto de ingresos del 1,1% en 2025 y una mejora significativa del margen bruto de 170 puntos básicos, lo que indica una gestión más eficiente de costes. Sin embargo, el reducido volumen de negociación y la cotización por debajo de la media de 200 sesiones sugieren cautela y escaso impulso alcista a corto plazo.</div>
+    </div>
+  </div>
+</div>
+<div class="stock-card" style="border-left:4px solid #bc8cff">
+  <div class="stock-header">
+    <div>
+      <span class="stock-name">LibertyStream Infrastructure</span>
+      <span class="stock-ticker">LIB</span>
+    </div>
+    <div style="text-align:right">
+      <div style="font-size:18px;font-weight:700;color:var(--text)">€0.12</div>
+      <div style="font-size:13px;color:#3fb950">+2.5%</div>
+    </div>
+  </div>
+  <div class="stock-body">
+    <div class="stock-section">
+      <div class="section-title">📰 Noticias</div>
+      <div style="margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid var(--border)">
+          <a href="https://finance.yahoo.com/markets/stocks/articles/3-european-penny-stocks-market-060447077.html?.tsrc=rss" target="_blank" style="color:var(--text);font-weight:600;font-size:13px;text-decoration:none;line-height:1.4">3 acciones europeas de bajo precio con capitalización inferior a 40 millones de euros</a>
+          <div style="color:var(--muted);font-size:11px;margin-top:3px">Yahoo Finance · 10 abr 2026</div>
+          <div style="color:var(--muted);font-size:12px;margin-top:4px">LibertyStream figura entre las pequeñas compañías europeas analizadas en un contexto de mejora del índice STOXX Europe 600 y mayor apetito por el riesgo.</div>
+        </div><div style="margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid var(--border)">
+          <a href="https://news.google.com/rss/articles/CBMivAFBVV95cUxQcEVfVndTRDJJd0FBaWFWYS1YdW1DQ0VKeTZMbV8yTWhvYmptRGphSmhvb3RaeFhDcjdYXzliNlBVMGQzeGlSZFFYSG8xSlgxbW85U0NRaGFlQkRNQ0FpVzRGcjVidVUzZ0FveVU3Z1M2VGVMUkoxOGxCSi1ERWhRZW5nc0MtX2lPMk8yNUswcmtDQ1pfWFM2VUVUR3M0dU00ZThmcE5QM0g4eHM5WExadWs2MENFX0RUWTQzYw?oc=5" target="_blank" style="color:var(--text);font-weight:600;font-size:13px;text-decoration:none;line-height:1.4">Acuerdo de salmuera en Texas transforma residuos en litio para baterías estadounidenses</a>
+          <div style="color:var(--muted);font-size:11px;margin-top:3px">Stock Titan · 9 feb 2026</div>
+          <div style="color:var(--muted);font-size:12px;margin-top:4px">Un innovador proyecto convierte salmueras residuales de pozos petrolíferos en Texas en litio aprovechable para la fabricación de baterías en suelo estadounidense.</div>
+        </div><div style="margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid var(--border)">
+          <a href="https://news.google.com/rss/articles/CBMiwwFBVV95cUxOWGpCVDRCTXE5YXJrWWRFUGMtNE1ka2d6aHJxNnJuTVYwd0xZWHpvR2g4WWJQVlFZODFDdjF4bHhnUnpxbFlDN3hYWWtXQktxbTd1aVpXaEV5YnFrNlQ3azRNdUZJYVduSVBOcV9DLUFibHl6bUFwU21jWVUxUTRZcVR3bG80Ul9lQmZIQmUybG41eHJCdjlBU3pWcG9RN3JSZ0g3cU9hbDk5MnIzU3NoeVotMmFiV1VYa190bDN6bjR4N2s?oc=5" target="_blank" style="color:var(--text);font-weight:600;font-size:13px;text-decoration:none;line-height:1.4">LibertyStream Infrastructure Partners destaca con nueva alianza de baterías para uso militar</a>
+          <div style="color:var(--muted);font-size:11px;margin-top:3px">Equity.Guru · 28 nov 2025</div>
+          <div style="color:var(--muted);font-size:12px;margin-top:4px">La empresa anunció una prometedora asociación con el sector de defensa para el suministro de sistemas de baterías, impulsando el interés de inversores especulativos.</div>
+        </div>
+    </div>
+    <div class="stock-section">
+      <div class="section-title">📈 Análisis técnico</div>
+      <table style="width:100%;font-size:13px;border-collapse:collapse">
+        <tr><td style="color:var(--muted);padding:3px 0">MA50</td><td style="color:var(--text);text-align:right">€0.11</td></tr>
+        <tr><td style="color:var(--muted);padding:3px 0">MA200</td><td style="color:var(--text);text-align:right">€0.10</td></tr>
+        <tr><td style="color:var(--muted);padding:3px 0">Volumen</td><td style="color:var(--text);text-align:right">Bajo</td></tr>
+      </table>
+      <div style="margin-top:6px">
+      <div style="font-size:11px;color:var(--muted);margin-bottom:3px">RSI: Neutral (58)</div>
+      <div style="background:var(--surface2);border-radius:4px;height:8px;overflow:hidden">
+        <div style="width:58%;height:100%;background:#3fb950;border-radius:4px"></div>
+      </div>
+    </div>
+    </div>
+    <div class="stock-section">
+      <div class="section-title">🎯 Recomendación</div>
+      <div style="margin-bottom:10px">
+        <span style="background:#bc8cff;color:#000;padding:4px 12px;border-radius:20px;font-weight:700;font-size:13px">ESPECULATIVO</span>
+      </div>
+      <div style="color:var(--muted);font-size:13px;line-height:1.6">LibertyStream Infrastructure ha captado atención gracias a su asociación con el sector militar para baterías y al potencial del litio extraído de salmueras de Texas, lo que abre nichos de mercado diferenciados. No obstante, la capitalización inferior a 40 millones de euros y el escaso volumen de negociación hacen que sea una apuesta de alto riesgo reservada para inversores especulativos.</div>
+    </div>
+  </div>
+</div>
+<div class="stock-card" style="border-left:4px solid #bc8cff">
+  <div class="stock-header">
+    <div>
+      <span class="stock-name">Titomic</span>
+      <span class="stock-ticker">TTT</span>
+    </div>
+    <div style="text-align:right">
+      <div style="font-size:18px;font-weight:700;color:var(--text)">A$0.09</div>
+      <div style="font-size:13px;color:#3fb950">+1.8%</div>
+    </div>
+  </div>
+  <div class="stock-body">
+    <div class="stock-section">
+      <div class="section-title">📰 Noticias</div>
+      <div style="margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid var(--border)">
+          <a href="https://finance.yahoo.com/markets/stocks/articles/3-asx-growth-stocks-insiders-194010315.html?.tsrc=rss" target="_blank" style="color:var(--text);font-weight:600;font-size:13px;text-decoration:none;line-height:1.4">3 acciones de crecimiento en la ASX con participación de insiders y hasta un 90% de crecimiento en beneficios</a>
+          <div style="color:var(--muted);font-size:11px;margin-top:3px">Yahoo Finance · 8 abr 2026</div>
+          <div style="color:var(--muted);font-size:12px;margin-top:4px">Titomic aparece entre las compañías del ASX con alto potencial de crecimiento en beneficios y notable participación de directivos en el accionariado.</div>
+        </div><div style="margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid var(--border)">
+          <a href="https://finance.yahoo.com/markets/stocks/articles/asx-value-stocks-trading-below-193451271.html?.tsrc=rss" target="_blank" style="color:var(--text);font-weight:600;font-size:13px;text-decoration:none;line-height:1.4">Acciones infravaloradas del ASX por debajo de su valor estimado en abril de 2026</a>
+          <div style="color:var(--muted);font-size:11px;margin-top:3px">Yahoo Finance · 7 abr 2026</div>
+          <div style="color:var(--muted);font-size:12px;margin-top:4px">Titomic figura en una selección de valores australianos que cotizarían por debajo de su valor intrínseco estimado en el contexto actual del mercado.</div>
+        </div><div style="margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid var(--border)">
+          <a href="https://www.proactiveinvestors.com/companies/news/1089622/titomic-lands-1-7-million-royal-nlr-order-for-cold-spray-systems-1089622.html?.tsrc=rss" target="_blank" style="color:var(--text);font-weight:600;font-size:13px;text-decoration:none;line-height:1.4">Titomic consigue un pedido de 1,7 millones de dólares australianos del Royal NLR para sistemas de proyección fría</a>
+          <div style="color:var(--muted);font-size:11px;margin-top:3px">Proactive Investors · 26 mar 2026</div>
+          <div style="color:var(--muted);font-size:12px;margin-top:4px">El centro nacional de investigación aeroespacial de los Países Bajos encargó a Titomic sistemas de proyección fría por un valor de aproximadamente 1,02 millones de euros.</div>
+        </div>
+    </div>
+    <div class="stock-section">
+      <div class="section-title">📈 Análisis técnico</div>
+      <table style="width:100%;font-size:13px;border-collapse:collapse">
+        <tr><td style="color:var(--muted);padding:3px 0">MA50</td><td style="color:var(--text);text-align:right">A$0.08</td></tr>
+        <tr><td style="color:var(--muted);padding:3px 0">MA200</td><td style="color:var(--text);text-align:right">A$0.07</td></tr>
+        <tr><td style="color:var(--muted);padding:3px 0">Volumen</td><td style="color:var(--text);text-align:right">Normal</td></tr>
+      </table>
+      <div style="margin-top:6px">
+      <div style="font-size:11px;color:var(--muted);margin-bottom:3px">RSI: Neutral (61)</div>
+      <div style="background:var(--surface2);border-radius:4px;height:8px;overflow:hidden">
+        <div style="width:61%;height:100%;background:#3fb950;border-radius:4px"></div>
+      </div>
+    </div>
+    </div>
+    <div class="stock-section">
+      <div class="section-title">🎯 Recomendación</div>
+      <div style="margin-bottom:10px">
+        <span style="background:#bc8cff;color:#000;padding:4px 12px;border-radius:20px;font-weight:700;font-size:13px">ESPECULATIVO</span>
+      </div>
+      <div style="color:var(--muted);font-size:13px;line-height:1.6">Titomic ha asegurado un pedido relevante por parte del centro nacional de investigación aeroespacial de los Países Bajos, lo que valida su tecnología de proyección fría y su posicionamiento en mercados de alta tecnología. Pese a este catalizador positivo, la acción sigue cotizando a niveles de penny stock con alta volatilidad, lo que la sitúa como una inversión de carácter especulativo.</div>
+    </div>
+  </div>
+</div>
+</div>
+<footer>Este reporte es solo informativo y no constituye asesoramiento financiero. · Actualizado: Friday 17 de April de 2026</footer>
+</body>
+</html>
