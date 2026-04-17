@@ -1,6 +1,7 @@
 import os, json, requests, anthropic
 from xml.etree import ElementTree as ET
 from datetime import datetime
+from urllib.parse import quote
 
 STOCKS = [
     {"ticker": "TSLA",   "name": "Tesla"},
@@ -38,7 +39,7 @@ def fetch_yahoo(ticker):
         return []
 
 def fetch_google(query):
-    url = f"https://news.google.com/rss/search?q={requests.utils.quote(query)}+stock&hl=en-US&gl=US&ceid=US:en"
+    url = f"https://news.google.com/rss/search?q={quote(query)}+stock&hl=en-US&gl=US&ceid=US:en"
     try:
         r = requests.get(url, timeout=10, headers=HEADERS)
         root = ET.fromstring(r.content)
@@ -269,9 +270,3 @@ with open("reporte_cartera.html", "w", encoding="utf-8") as f:
     f.write(html)
 
 print(f"Report written ({len(html):,} chars) with {len(data['acciones'])} stocks")
-
-
-with open("reporte_cartera.html", "w", encoding="utf-8") as f:
-    f.write(html)
-
-print(f"Report written ({len(html):,} chars)")
