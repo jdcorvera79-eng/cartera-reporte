@@ -239,10 +239,11 @@ for i, batch in enumerate(batches):
     print(f"  Total so far: {len(all_acciones)}")
 
 print("Generating executive summary...")
+cartera_resumen = [{"ticker": a["ticker"], "rec": a["recomendacion"], "razon": a["razonamiento"]} for a in all_acciones]
 summary_prompt = f"""Eres un analista financiero. Resume en 3-4 frases el estado actual de esta cartera.
 
 FECHA: {fecha_str}
-CARTERA: {json.dumps([{{"ticker":a["ticker"],"rec":a["recomendacion"],"razon":a["razonamiento"]}} for a in all_acciones], ensure_ascii=False)}
+CARTERA: {json.dumps(cartera_resumen, ensure_ascii=False)}
 MACRO: {json.dumps(macro_news[:6], ensure_ascii=False)}
 
 Escribe un párrafo en español (directo, profesional) que mencione: sentimiento general (alcista/bajista/mixto), 1-2 acciones destacadas, contexto macro relevante. Solo el párrafo, sin títulos."""
