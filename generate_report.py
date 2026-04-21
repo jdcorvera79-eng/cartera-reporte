@@ -73,6 +73,9 @@ def fetch_technicals(s, spy_30d=None):
             return None
         closes   = hist["Close"].values.astype(float)
         vols     = hist["Volume"].values.astype(float)
+        closes   = closes[~np.isnan(closes)]
+        if len(closes) < 2:
+            return None
         price    = closes[-1]
         ma50     = np.mean(closes[-50:])  if len(closes) >= 50  else np.mean(closes)
         ma200    = np.mean(closes[-200:]) if len(closes) >= 200 else np.mean(closes)
@@ -215,7 +218,7 @@ Reglas:
 def analyze_batch(batch_tickers, fecha):
     batch_data = {t: {"name": all_news[t]["name"], "news": all_news[t]["news"], "tech": all_technicals.get(t)} for t in batch_tickers}
     msg = client.messages.create(
-        model="claude-sonnet-4-6",
+        model="claude-haiku-4-5-20251001",
         max_tokens=8192,
         messages=[{"role": "user", "content": BATCH_PROMPT.format(fecha=fecha, datos=json.dumps(batch_data, ensure_ascii=False))}],
     )
@@ -248,7 +251,7 @@ MACRO: {json.dumps(macro_news[:6], ensure_ascii=False)}
 
 Escribe un párrafo en español (directo, profesional) que mencione: sentimiento general (alcista/bajista/mixto), 1-2 acciones destacadas, contexto macro relevante. Solo el párrafo, sin títulos."""
 
-summary_msg  = client.messages.create(model="claude-sonnet-4-6", max_tokens=400,
+summary_msg  = client.messages.create(model="claude-haiku-4-5-20251001", max_tokens=400,
     messages=[{"role": "user", "content": summary_prompt}])
 resumen_ejecutivo = summary_msg.content[0].text.strip()
 
@@ -447,3 +450,6 @@ with open("reporte_cartera.html", "w", encoding="utf-8") as f:
     f.write(html)
 
 print(f"Done: {len(all_acciones)} stocks, {len(html):,} chars")
+
+
+
