@@ -388,5 +388,22 @@
       "LIB": "ESPECULATIVO",
       "TTT": "MANTENER"
     }
+  },
+  {
+    "fecha": "2026-05-14",
+    "recs": {
+      "TSLA": "MANTENER",
+      "HIMS": "VENDER",
+      "DUOL": "COMPRAR",
+      "BMNR": "ESPECULATIVO",
+      "LODE": "MANTENER",
+      "HGRAF": "ESPECULATIVO",
+      "HBFG": "COMPRAR",
+      "ABX": "COMPRAR",
+      "3350": "VENDER",
+      "BILD": "MANTENER",
+      "LIB": "ESPECULATIVO",
+      "TTT": "MANTENER"
+    }
   }
 ]
