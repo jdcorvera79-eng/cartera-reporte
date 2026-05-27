@@ -1,22 +1,5 @@
 [
   {
-    "fecha": "2026-04-27",
-    "recs": {
-      "TSLA": "MANTENER",
-      "HIMS": "COMPRAR",
-      "DUOL": "MANTENER",
-      "BMNR": "ESPECULATIVO",
-      "LODE": "MANTENER",
-      "HGRAF": "ESPECULATIVO",
-      "HBFG": "MANTENER",
-      "ABX": "MANTENER",
-      "3350": "ESPECULATIVO",
-      "BILD": "COMPRAR",
-      "LIB": "MANTENER",
-      "TTT": "MANTENER"
-    }
-  },
-  {
     "fecha": "2026-04-28",
     "recs": {
       "TSLA": "VENDER",
@@ -501,6 +484,23 @@
       "LODE": "ESPECULATIVO",
       "HGRAF": "MANTENER",
       "HBFG": "VENDER",
+      "ABX": "COMPRAR",
+      "3350": "ESPECULATIVO",
+      "BILD": "MANTENER",
+      "LIB": "COMPRAR",
+      "TTT": "MANTENER"
+    }
+  },
+  {
+    "fecha": "2026-05-27",
+    "recs": {
+      "TSLA": "MANTENER",
+      "HIMS": "COMPRAR",
+      "DUOL": "MANTENER",
+      "BMNR": "ESPECULATIVO",
+      "LODE": "ESPECULATIVO",
+      "HGRAF": "MANTENER",
+      "HBFG": "ESPECULATIVO",
       "ABX": "COMPRAR",
       "3350": "ESPECULATIVO",
       "BILD": "MANTENER",
